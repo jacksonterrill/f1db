@@ -14,41 +14,14 @@ CREATE TABLE nation (
 );
 
 INSERT INTO nation (nation_name, nation_abbreviation) VALUES
-("Argentina", "AR"),
-("Australia", "AU"),
-("Austria", "AT"),
-("Azerbaijan", "AZ"),
-("Bahrain", "BH"),
-("Belgium", "BE"),
-("Brazil", "BR"),
-("Canada", "CA"),
-("China", "CN"),
-("Finland", "FI"),
-("France", "FR"),
-("Germany", "DE"),
-("Hungary", "HU"),
-("India", "IN"),
-("Italy", "IT"),
-("Japan", "JP"),
-("Malaysia", "MY"),
-("Mexico", "MX"),
-("Monaco", "MC"),
-("Morocco", "MA"),
-("Netherlands", "NL"),
-("Portugal", "PT"),
-("Qatar", "QA"),
-("Russia", "RU"),
-("Saudi Arabia", "SA"),
-("Singapore", "SG"),
-("South Africa", "ZA"),
-("South Korea", "KR"),
-("Spain", "ES"),
-("Sweden", "SE"),
-("Switzerland", "CH"),
-("Turkey", "TR"),
-("United Arab Emirates", "AE"),
-("United Kingdom of Great Britain and Northern Ireland", "UK"),
-("United States of America", "US");
+("Argentina", "AR"), ("Australia", "AU"), ("Austria", "AT"), ("Azerbaijan", "AZ"), ("Bahrain", "BH"),
+("Belgium", "BE"), ("Brazil", "BR"), ("Canada", "CA"), ("China", "CN"), ("Finland", "FI"),
+("France", "FR"), ("Germany", "DE"), ("Hungary", "HU"), ("India", "IN"), ("Italy", "IT"),
+("Japan", "JP"), ("Malaysia", "MY"), ("Mexico", "MX"), ("Monaco", "MC"), ("Morocco", "MA"),
+("Netherlands", "NL"), ("Portugal", "PT"), ("Qatar", "QA"), ("Russia", "RU"), ("Saudi Arabia", "SA"),
+("Singapore", "SG"), ("South Africa", "ZA"), ("South Korea", "KR"), ("Spain", "ES"), ("Sweden", "SE"),
+("Switzerland", "CH"), ("Turkey", "TR"), ("United Arab Emirates", "AE"), 
+("United Kingdom of Great Britain and Northern Ireland", "UK"), ("United States of America", "US");
 
 DROP TABLE IF EXISTS driver;
 CREATE TABLE driver (
@@ -64,26 +37,16 @@ CREATE TABLE driver (
 );
 
 INSERT INTO driver (driver_name, driver_abbreviation, racing_number, nationality, birthday) VALUES 
-("Lewis Hamilton", "HAM", 44, 34, "1985-01-07"),
-("Valtteri Bottas", "BOT", 77, 10, "1989-08-28"),
-("Sergio Perez", "PER", 11, 18, "1990-01-26"),
-("Max Verstappen", "VER", 33, 21, "1997-09-30"),
-("Daniel Ricciardo", "RIC", 3, 2, "1989-07-01"),
-("Lando Norris", "NOR", 4, 34, "1999-11-13"),
-("Sebastian Vettel", "VET", 5, 12, "1987-01-03"),
-("Lance Stroll", "STR", 18, 8, "1998-10-29"),
-("Fernando Alonso", "ALO", 14, 29, "1981-07-29"),
-("Esteban Ocon", "OCO", 31, 11, "1996-09-17"),
-("Charles Leclerc", "LEC", 16, 19, "1997-10-16"),
-("Carlos Sainz", "SAI", 55, 29, "1994-09-01"),
-("Pierre Gasly", "GAS", 10, 11, "1996-02-07"),
-("Yuki Tsunoda", "TSU", 22, 16, "2000-05-11"),
-("Kimi Raikkonen", "RAI", 7, 10, "1979-10-17"),
-("Antonio Giovinazzi", "GIO", 99, 15, "1993-12-14"),
-("Nikita Mazepin", "MAZ", 9, 24, "1999-03-02"),
-("Mick Schumacher", "MSC", 47, 12, "1999-03-22"),
-("Nicholas Latifi", "LAT", 6, 8, "1995-06-29"),
-("George Russell", "RUS", 63, 34, "1998-02-15");
+("Lewis Hamilton", "HAM", 44, 34, "1985-01-07"), ("Valtteri Bottas", "BOT", 77, 10, "1989-08-28"),
+("Sergio Perez", "PER", 11, 18, "1990-01-26"), ("Max Verstappen", "VER", 33, 21, "1997-09-30"),
+("Daniel Ricciardo", "RIC", 3, 2, "1989-07-01"), ("Lando Norris", "NOR", 4, 34, "1999-11-13"),
+("Sebastian Vettel", "VET", 5, 12, "1987-01-03"), ("Lance Stroll", "STR", 18, 8, "1998-10-29"),
+("Fernando Alonso", "ALO", 14, 29, "1981-07-29"), ("Esteban Ocon", "OCO", 31, 11, "1996-09-17"),
+("Charles Leclerc", "LEC", 16, 19, "1997-10-16"), ("Carlos Sainz", "SAI", 55, 29, "1994-09-01"),
+("Pierre Gasly", "GAS", 10, 11, "1996-02-07"), ("Yuki Tsunoda", "TSU", 22, 16, "2000-05-11"),
+("Kimi Raikkonen", "RAI", 7, 10, "1979-10-17"), ("Antonio Giovinazzi", "GIO", 99, 15, "1993-12-14"),
+("Nikita Mazepin", "MAZ", 9, 24, "1999-03-02"), ("Mick Schumacher", "MSC", 47, 12, "1999-03-22"),
+("Nicholas Latifi", "LAT", 6, 8, "1995-06-29"), ("George Russell", "RUS", 63, 34, "1998-02-15");
 
 DROP TABLE IF EXISTS team;
 CREATE TABLE team (
@@ -92,16 +55,11 @@ CREATE TABLE team (
 );
 
 INSERT INTO team (team_name) VALUES 
-("Mercedes-AMG Petronas Formula One Team"),
-("Red Bull Racing"),
-("McLaren F1 Team"),
-("Aston Martin Cognizant Formula One Team"),
-("Alpine F1 Team"),
-("Scuderia Ferrari Mission Winnow"),
-("Scuderia AlphaTauri Honda"),
-("Alfa Romeo Racing ORLEN"),
-("Uralkali Haas F1 Team"),
-("Williams Racing");
+("Mercedes-AMG Petronas Formula One Team"), ("Red Bull Racing"),
+("McLaren F1 Team"), ("Aston Martin Cognizant Formula One Team"),
+("Alpine F1 Team"), ("Scuderia Ferrari Mission Winnow"),
+("Scuderia AlphaTauri Honda"), ("Alfa Romeo Racing ORLEN"),
+("Uralkali Haas F1 Team"), ("Williams Racing");
 
 DROP TABLE IF EXISTS employs;
 CREATE TABLE employs (
@@ -119,26 +77,16 @@ CREATE TABLE employs (
 );
 
 INSERT INTO employs VALUES
-(1, 1, "2021"),
-(1, 2, "2021"),
-(2, 3, "2021"),
-(2, 4, "2021"),
-(3, 5, "2021"),
-(3, 6, "2021"),
-(4, 7, "2021"),
-(4, 8, "2021"),
-(5, 9, "2021"),
-(5, 10, "2021"),
-(6, 11, "2021"),
-(6, 12, "2021"),
-(7, 13, "2021"),
-(7, 14, "2021"),
-(8, 15, "2021"),
-(8, 16, "2021"),
-(9, 17, "2021"),
-(9, 18, "2021"),
-(10, 19, "2021"),
-(10, 20, "2021");
+(1, 1, "2021"), (1, 2, "2021"),
+(2, 3, "2021"), (2, 4, "2021"),
+(3, 5, "2021"), (3, 6, "2021"),
+(4, 7, "2021"), (4, 8, "2021"),
+(5, 9, "2021"), (5, 10, "2021"),
+(6, 11, "2021"), (6, 12, "2021"),
+(7, 13, "2021"), (7, 14, "2021"),
+(8, 15, "2021"), (8, 16, "2021"),
+(9, 17, "2021"), (9, 18, "2021"),
+(10, 19, "2021"), (10, 20, "2021");
 
 DROP TABLE IF EXISTS constructs;
 CREATE TABLE constructs (
@@ -173,40 +121,15 @@ CREATE TABLE company (
 
 INSERT INTO company (company_name) VALUES
 ("Pirelli"),
-("Petronas"),
-("Epson"),
-("Bose"),
-("Hewlett Packard"),
-("Monster Energy"),
-("Rauch"),
-("Honda"),
-("Mobil 1 Esso"),
-("Tag Heuer"),
-("Dell"),
-("Coca Cola"),
-("CNBC"),
-("Cisco Webex"),
-("Alienware"),
-("Crypto.com"),
-("Oakley"),
-("Castrol"),
-("Dupont"),
-("Microsoft"),
-("Boeing"),
-("Siemens"),
-("Ray-Ban"),
-("UPS"),
-("Experis"),
-("Shell"),
-("Giorgio Armani"),
-("PKN Orlen"),
-("Iveco"),
-("Mitsubishi Electric"),
-("1&1"),
-("Under Armour"),
-("Sofina"),
-("Symantec"),
-("Umbro");
+("Petronas"), ("Epson"), ("Bose"), ("Hewlett Packard"), ("Monster Energy"),
+("Rauch"), ("Honda"), ("Mobil 1 Esso"), ("Tag Heuer"),
+("Dell"), ("Coca Cola"), ("CNBC"), ("Cisco Webex"), ("Alienware"),
+("Crypto.com"), ("Oakley"),
+("Castrol"), ("Dupont"), ("Microsoft"), ("Boeing"), ("Siemens"), 
+("Ray-Ban"), ("UPS"), ("Experis"), ("Shell"), ("Giorgio Armani"),
+("PKN Orlen"), ("Iveco"), ("Mitsubishi Electric"),
+("1&1"), ("Under Armour"),
+("Sofina"), ("Symantec"), ("Umbro");
 
 DROP TABLE IF EXISTS sponsors;
 CREATE TABLE sponsors (
@@ -224,53 +147,16 @@ CREATE TABLE sponsors (
 );
 
 INSERT INTO sponsors VALUES
-(1, 1, "2021"),
-(1, 2, "2021"),
-(1, 3, "2021"),
-(1, 4, "2021"),
-(1, 5, "2021"),
-(1, 6, "2021"),
-(1, 7, "2021"),
-(1, 8, "2021"),
-(1, 9, "2021"),
-(1, 10, "2021"),
-(2, 1, "2021"),
-(3, 1, "2021"),
-(4, 1, "2021"),
-(5, 1, "2021"),
-(6, 1, "2021"),
-(7, 2, "2021"),
-(8, 2, "2021"),
-(8, 6, "2021"),
-(9, 2, "2021"),
-(10, 2, "2021"),
-(11, 3, "2021"),
-(12, 3, "2021"),
-(13, 3, "2021"),
-(14, 3, "2021"),
-(15, 3, "2021"),
-(16, 4, "2021"),
-(17, 4, "2021"),
-(18, 5, "2021"),
-(19, 5, "2021"),
-(20, 5, "2021"),
-(21, 5, "2021"),
-(22, 2, "2021"),
-(22, 5, "2021"),
-(22, 6, "2021"),
-(23, 7, "2021"),
-(24, 7, "2021"),
-(25, 7, "2021"),
-(26, 7, "2021"),
-(27, 7, "2021"),
-(28, 8, "2021"),
-(29, 8, "2021"),
-(30, 8, "2021"),
-(31, 9, "2021"),
-(32, 9, "2021"),
-(33, 10, "2021"),
-(34, 10, "2021"),
-(35, 10, "2021");
+(1, 1, "2021"), (1, 2, "2021"), (1, 3, "2021"), (1, 4, "2021"), (1, 5, "2021"),
+(1, 6, "2021"), (1, 7, "2021"), (1, 8, "2021"), (1, 9, "2021"), (1, 10, "2021"),
+(2, 1, "2021"), (3, 1, "2021"), (4, 1, "2021"), (5, 1, "2021"), (6, 1, "2021"),
+(7, 2, "2021"), (8, 2, "2021"), (8, 6, "2021"), (9, 2, "2021"), (10, 2, "2021"),
+(11, 3, "2021"), (12, 3, "2021"), (13, 3, "2021"), (14, 3, "2021"), (15, 3, "2021"),
+(16, 4, "2021"), (17, 4, "2021"), (18, 5, "2021"), (19, 5, "2021"), (20, 5, "2021"),
+(21, 5, "2021"), (22, 2, "2021"), (22, 5, "2021"), (22, 6, "2021"), (23, 7, "2021"),
+(24, 7, "2021"), (25, 7, "2021"), (26, 7, "2021"), (27, 7, "2021"), (28, 8, "2021"),
+(29, 8, "2021"), (30, 8, "2021"), (31, 9, "2021"), (32, 9, "2021"), (33, 10, "2021"),
+(34, 10, "2021"), (35, 10, "2021");
 
 DROP TABLE IF EXISTS principal;
 CREATE TABLE principal (
@@ -279,16 +165,8 @@ CREATE TABLE principal (
 );
 
 INSERT INTO principal (principal_name) VALUES
-("Toto Wolff"),
-("Christian Horner"),
-("Andreas Seidl"),
-("Otmar Szafnauer"),
-("Laurent Rossi"),
-("Franz Tost"),
-("Mattia Binotto"),
-("Frederic Vasseur"),
-("Guenther Steiner"),
-("Jost Capito");
+("Toto Wolff"), ("Christian Horner"), ("Andreas Seidl"), ("Otmar Szafnauer"), ("Laurent Rossi"),
+("Franz Tost"), ("Mattia Binotto"), ("Frederic Vasseur"), ("Guenther Steiner"), ("Jost Capito");
 
 DROP TABLE IF EXISTS manages;
 CREATE TABLE manages (
@@ -306,16 +184,8 @@ CREATE TABLE manages (
 );
 
 INSERT INTO manages VALUES
-(1, 1, "2021"),
-(2, 2, "2021"),
-(3, 3, "2021"),
-(4, 4, "2021"),
-(5, 5, "2021"),
-(6, 6, "2021"),
-(7, 7, "2021"),
-(8, 8, "2021"),
-(9, 9, "2021"),
-(10, 10, "2021");
+(1, 1, "2021"), (2, 2, "2021"), (3, 3, "2021"), (4, 4, "2021"), (5, 5, "2021"),
+(6, 6, "2021"), (7, 7, "2021"), (8, 8, "2021"), (9, 9, "2021"), (10, 10, "2021");
 
 DROP TABLE IF EXISTS circuit;
 CREATE TABLE circuit (
