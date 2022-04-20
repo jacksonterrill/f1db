@@ -43,9 +43,61 @@ def work():
             table_chosen = input("Out of the tables above, which would you like to create a new tuple for? ")
         
             
-            # TODO: run a procedure/function/trigger to create a new tuple
+            # check if table name is in the table list
             if table_chosen.upper().strip() in table_lst:
-                pass
+               
+                # create statement to show columns
+                col_stmt = "DESCRIBE " + table_chosen.upper().strip()
+                
+                # execute select statement
+                try:
+                    cur = cnx.cursor()
+                    cur.execute(col_stmt)
+                    
+                    # print each column and add each to a list
+                    fields_lst = []
+                    type_lst = []
+                    for row in cur.fetchall():
+                        if row["Extra"] == "auto_increment":
+                            pass
+                        else:
+                            fields_lst.append(row["Field"])
+                            type_lst.append(row["Type"])
+               
+                    print(fields_lst)
+                # give error message if goes wrong
+                except pymysql.Error as e:
+                    print('SELECT failed, Error" %d %s' % (e.args[0], e.args[1]))
+                    exit()
+                
+                # collect values for each column
+                value_lst = []
+                i = 0
+                for each in fields_lst:
+                    create_value = input("What is the value for " + each + \
+                                         " ( " + type_lst[i] + " ) ? ")
+                    value_lst.append("'" + create_value.strip() + "'")
+                    i += 1
+                
+                # insert into table
+                joined_columns = ",".join(fields_lst)
+                joined_values = ",".join(value_lst)
+                insert_stmt = "INSERT INTO " + table_chosen.upper().strip() +\
+                    "(" + joined_columns + ") VALUES (" + joined_values + ")"
+                
+                # try to execute insert command
+                try:
+                    cur = cnx.cursor()
+                    cur.execute(insert_stmt)
+                    print()
+                    print("Tuple has been created!")
+                    
+                # if insert command doesnt work then display error
+                except pymysql.Error as e:
+                    print('CREATE failed, Error" %d %s' % (e.args[0], e.args[1]))
+                    exit()
+                    
+            # give error message if table name is invalid 
             else:
                 print('Conn refused, invalid table name')
                 exit()
@@ -63,9 +115,27 @@ def work():
             # prompt for table
             table_chosen = input("Which table from above would you like to read? ")
             
-            # TODO: insert select statement
+            # check if table is in the list
             if table_chosen.upper().strip() in table_lst:
-                pass
+                
+                # enter select statement
+                stmt_select = "select * from " + table_chosen.upper().strip()
+                
+                # execute select statement
+                try:
+                    cur = cnx.cursor()
+                    cur.execute(stmt_select)
+                    
+                    # print each row
+                    for row in cur.fetchall():
+                        print(row)
+               
+                # give error message if goes wrong
+                except pymysql.Error as e:
+                    print('SELECT failed, Error" %d %s' % (e.args[0], e.args[1]))
+                    exit()
+            
+            # if given wrong table name, give error
             else:
                 print('Conn refused, invalid table name')
                 exit()
