@@ -20,17 +20,17 @@ def create(table_chosen, cnx):
     # create statement to show fields
     field_stmt = "DESCRIBE " + table_chosen.upper().strip()
 
-    # execute select statement
+    # execute describe statement
     try:
         cur = cnx.cursor()
         cur.execute(field_stmt)
         # print each field and add each to a list
         field_list = []
         type_list = []
-        for row in cur.fetchall():
-            if row["Extra"] != "auto_increment":
-                field_list.append(row["Field"])
-                type_list.append(row["Type"])
+        for field in cur.fetchall():
+            if field["Extra"] != "auto_increment":
+                field_list.append(field["Field"])
+                type_list.append(field["Type"])
         joined_fields = ", ".join(field_list)
         print("Fields: " + joined_fields)
     # give error message if goes wrong
@@ -45,6 +45,7 @@ def create(table_chosen, cnx):
                 
     # insert into table
     joined_values = ", ".join(value_list)
+    print("New Entry: " + joined_values)
     insert_stmt = "INSERT INTO " + table_chosen.upper().strip() + "(" + joined_fields + ") VALUES (" + joined_values + ")"
                 
     # try to execute insert command
@@ -74,8 +75,41 @@ def read(table_chosen, cnx):
 
 # if update is chosen
 def update(table_chosen, cnx):
-    # TODO: run a procedure/function/trigger to update a tuple
-    return
+    # TODO: clean up entry validation and error handling
+    read(table_chosen, cnx)
+    # create statement to show fields
+    field_stmt = "DESCRIBE " + table_chosen.upper().strip()
+    # execute describe statement
+    try:
+        cur = cnx.cursor()
+        cur.execute(field_stmt)
+        # print each field and add each to a list
+        field_list = []
+        type_list = []
+        for field in cur.fetchall():
+            if field["Key"] == "PRI":
+                primary_key = field["Field"]
+            elif field["Extra"] != "auto_increment":
+                field_list.append(field["Field"])
+                type_list.append(field["Type"])
+        
+    # give error message if goes wrong
+    except pymysql.Error as e:
+        print('DESCRIBE failed, ERROR" %d %s' % (e.args[0], e.args[1]))
+
+    tuple_chosen = input("What tuple would you like to update? (Enter primary key) ")
+    field_chosen = input("What field would you like to update? ")
+    updated_value = input("What value would you like to update that field to? ")
+    update_stmt = "UPDATE " + table_chosen.upper().strip() + " SET " + field_chosen.upper().strip() + " = \'" + updated_value + "\' WHERE " + primary_key.upper().strip() + " = " + tuple_chosen
+    
+    # try to execute update command
+    try:
+        cur = cnx.cursor()
+        cur.execute(update_stmt)
+        print("Tuple successfully updated!")
+    # if update command doesnt work then display error
+    except pymysql.Error as e:
+        print('UPDATE failed, ERROR" %d %s' % (e.args[0], e.args[1]))
 
 # if delete is chosen
 def delete(table_chosen, cnx):
