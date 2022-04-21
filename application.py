@@ -1,198 +1,167 @@
 from sys import exit
 import pymysql
 
-def work():
-    
-    # connect to the sql database
+# connect to the sql database
+def connect():
     try:
         cnx = pymysql.connect(host = 'localhost',
                               user = input("What is your username? "),
                               password = input("What is your password? "),
                               db = 'f1db',
                               cursorclass = pymysql.cursors.DictCursor )
+        print("Successfully connected to f1db")
+        return cnx
     except pymysql.Error as e:
-        print('Conn refused, Error" %d %s' % (e.args[0], e.args[1]))
+        print('Connection refused, ERROR" %d %s' % (e.args[0], e.args[1]))
         exit()
-    
-    # create list of tables
-    table_lst = []
+
+# create a tuple in a chosen table
+def create(table_chosen, cnx):
+    # create statement to show fields
+    field_stmt = "DESCRIBE " + table_chosen.upper().strip()
+
+    # execute select statement
+    try:
+        cur = cnx.cursor()
+        cur.execute(field_stmt)
+        # print each field and add each to a list
+        field_list = []
+        type_list = []
+        for row in cur.fetchall():
+            if row["Extra"] != "auto_increment":
+                field_list.append(row["Field"])
+                type_list.append(row["Type"])
+        joined_fields = ", ".join(field_list)
+        print("Fields: " + joined_fields)
+    # give error message if goes wrong
+    except pymysql.Error as e:
+        print('DESCRIBE failed, ERROR" %d %s' % (e.args[0], e.args[1]))
+
+    # collect values for each field in the tuple
+    value_list = []
+    for i in range(len(field_list)):
+        value = input("Enter a value for " + field_list[i] + " (" + type_list[i] + "): ")
+        value_list.append("'" + value.strip() + "'")
+                
+    # insert into table
+    joined_values = ", ".join(value_list)
+    insert_stmt = "INSERT INTO " + table_chosen.upper().strip() + "(" + joined_fields + ") VALUES (" + joined_values + ")"
+                
+    # try to execute insert command
+    try:
+        cur = cnx.cursor()
+        cur.execute(insert_stmt)
+        print("Tuple successfully created!")
+    # if insert command doesnt work then display error
+    except pymysql.Error as e:
+        print('CREATE failed, ERROR" %d %s' % (e.args[0], e.args[1]))
+
+# if read is chosen
+def read(table_chosen, cnx):
+    # enter select statement
+    stmt_select = "SELECT * FROM " + table_chosen.upper().strip()
+    # execute select statement
+    try:
+        cur = cnx.cursor()
+        cur.execute(stmt_select)
+        # print each row
+        for row in cur.fetchall():
+            print(row)
+               
+    # give error message if goes wrong
+    except pymysql.Error as e:
+        print('SELECT failed, ERROR" %d %s' % (e.args[0], e.args[1]))
+
+# if update is chosen
+def update(table_chosen, cnx):
+    # TODO: run a procedure/function/trigger to update a tuple
+    return
+
+# if delete is chosen
+def delete(table_chosen, cnx):
+    # TODO: run a procedure/function/trigger to delete a tuple
+    return
+
+# create list of tables
+def generate_table_list(cnx):
+    table_list = []
     cur = cnx.cursor()
     cur.execute("SHOW tables;")
     myresult = cur.fetchall()
     for each in myresult:
-        table_lst.append(each['Tables_in_f1db'].upper())
-        
-        
+        table_list.append(each['Tables_in_f1db'].upper())
+    return table_list
+
+if __name__ == "__main__":
+    print("Welcome to f1db! A Formula One Database designed by Jackson Terrill and Brady Hobson for CS3200")
+    cnx = connect()
+    table_list = generate_table_list(cnx)
+
     # create default_question
-    default_question = "Would you like to CREATE, READ, UPDATE, DELETE, or EXIT ? "
+    default_question = "\nWould you like to CALCULATE, CREATE, READ, UPDATE, DELETE, or EXIT? "
     option = input(default_question)
     print()
     
-    
     # keep program running until exit is chosen
     while option.upper().strip() != "EXIT":
-            
         # if create is chosen
         if option.upper().strip() == "CREATE":
-            
             # give list of tables
-            for each in table_lst:
-                print(each)
-            
+            for table in table_list:
+                print(table)
             # prompt for table
-            table_chosen = input("Out of the tables above, which would you like to create a new tuple for? ")
-        
-            
+            table_chosen = input("\nOut of the tables above, which would you like to create a new tuple for? ")
             # check if table name is in the table list
-            if table_chosen.upper().strip() in table_lst:
-               
-                # create statement to show columns
-                col_stmt = "DESCRIBE " + table_chosen.upper().strip()
-                
-                # execute select statement
-                try:
-                    cur = cnx.cursor()
-                    cur.execute(col_stmt)
-                    
-                    # print each column and add each to a list
-                    fields_lst = []
-                    type_lst = []
-                    for row in cur.fetchall():
-                        if row["Extra"] == "auto_increment":
-                            pass
-                        else:
-                            fields_lst.append(row["Field"])
-                            type_lst.append(row["Type"])
-               
-                    print(fields_lst)
-                # give error message if goes wrong
-                except pymysql.Error as e:
-                    print('SELECT failed, Error" %d %s' % (e.args[0], e.args[1]))
-                    exit()
-                
-                # collect values for each column
-                value_lst = []
-                i = 0
-                for each in fields_lst:
-                    create_value = input("What is the value for " + each + \
-                                         " ( " + type_lst[i] + " ) ? ")
-                    value_lst.append("'" + create_value.strip() + "'")
-                    i += 1
-                
-                # insert into table
-                joined_columns = ",".join(fields_lst)
-                joined_values = ",".join(value_lst)
-                insert_stmt = "INSERT INTO " + table_chosen.upper().strip() +\
-                    "(" + joined_columns + ") VALUES (" + joined_values + ")"
-                
-                # try to execute insert command
-                try:
-                    cur = cnx.cursor()
-                    cur.execute(insert_stmt)
-                    print()
-                    print("Tuple has been created!")
-                    
-                # if insert command doesnt work then display error
-                except pymysql.Error as e:
-                    print('CREATE failed, Error" %d %s' % (e.args[0], e.args[1]))
-                    exit()
-                    
+            if table_chosen.upper().strip() in table_list:
+                create(table_chosen, cnx)
             # give error message if table name is invalid 
             else:
-                print('Conn refused, invalid table name')
-                exit()
-                
-            # reask default question
-            option = input(default_question)
-            
+                print('Invalid table name')
         # if read is chosen
         elif option.upper().strip() == "READ":
-            
             # give list of tables
-            for each in table_lst:
-                print(each)
-                
+            for table in table_list:
+                print(table)
             # prompt for table
-            table_chosen = input("Which table from above would you like to read? ")
-            
+            table_chosen = input("\nWhich table from above would you like to read? ")
             # check if table is in the list
-            if table_chosen.upper().strip() in table_lst:
-                
-                # enter select statement
-                stmt_select = "select * from " + table_chosen.upper().strip()
-                
-                # execute select statement
-                try:
-                    cur = cnx.cursor()
-                    cur.execute(stmt_select)
-                    
-                    # print each row
-                    for row in cur.fetchall():
-                        print(row)
-               
-                # give error message if goes wrong
-                except pymysql.Error as e:
-                    print('SELECT failed, Error" %d %s' % (e.args[0], e.args[1]))
-                    exit()
-            
-            # if given wrong table name, give error
+            if table_chosen.upper().strip() in table_list:
+                read(table_chosen, cnx)
+            # give error message if table name is invalid 
             else:
-                print('Conn refused, invalid table name')
-                exit()
-            
-            # reask default question
-            option = input(default_question)
-           
+                print('Invalid table name')
         # if update is chosen
         elif option.upper().strip() == "UPDATE":
-            
             # give list of tables
-            for each in table_lst:
-                print(each)
-                
+            for table in table_list:
+                print(table)
             # prompt for table
-            table_chosen = input("Which table from above would you like to update? ")
-            
-            # TODO: run a procedure/function/trigger to update a tuple
-            if table_chosen.upper().strip() in table_lst:
-                pass
+            table_chosen = input("\nWhich table from above would you like to update? ")
+            if table_chosen.upper().strip() in table_list:
+                update(table_chosen, cnx)
+            # give error message if table name is invalid 
             else:
-                print('Conn refused, invalid table name')
-                exit()
-            
-            # reask default question
-            option = input(default_question)
-    
+                print('Invalid table name')
         # if delete is chosen
         elif option.upper().strip() == "DELETE":
-            
             # give list of tables
-            for each in table_lst:
-                print(each)
-                
+            for table in table_list:
+                print(table)
             # prompt for table
             table_chosen = input("Which table from above would you like to delete a tuple from? ")
-            
-            # TODO: run a procedure/function/trigger to delete a tuple
-            if table_chosen.upper().strip() in table_lst:
-                pass
+            if table_chosen.upper().strip() in table_list:
+                delete(table_chosen, cnx)
             else:
-                print('Conn refused, invalid table name')
-                exit()
-                
-            # reask default question
-            option = input(default_question)
-            
-        # if none is chosen
+                # give error message if table name is invalid 
+                print('Invalid table name')
+        # if invalid operation is chosen
         else:
-            
-            # print error message and close
-            print('Conn refused, wrong input selected')
-            exit()
-    
+            # print error message
+            print('Operation not supported')
+
+        # reask default question
+        option = input(default_question)
+
     # close the program
+    cnx.commit()
     cnx.close()
-    
-        
-if __name__ == "__main__":
-    work()
