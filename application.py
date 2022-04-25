@@ -323,3 +323,4 @@ if __name__ == "__main__":
 
     cnx.commit() # commit changes to the database
     cnx.close() # close the program
+    exit()
