@@ -29,11 +29,12 @@ CREATE TABLE driver (
     driver_name VARCHAR(64) NOT NULL,
     driver_abbreviation VARCHAR(3) NOT NULL,
     racing_number INT NOT NULL,
-    nationality INT NOT NULL,
+    nationality INT,
     birthday DATE NOT NULL,
     CONSTRAINT driver_fk_nation
 		FOREIGN KEY (nationality)
 		REFERENCES nation (nation_id)
+        ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 INSERT INTO driver (driver_name, driver_abbreviation, racing_number, nationality, birthday) VALUES 
@@ -70,10 +71,12 @@ CREATE TABLE employs (
 		PRIMARY KEY (team_id, driver_id, season),
 	CONSTRAINT employs_fk_team
 		FOREIGN KEY (team_id)
-		REFERENCES team (team_id),
+		REFERENCES team (team_id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT employs_fk_driver
 		FOREIGN KEY (driver_id)
 		REFERENCES driver (driver_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 INSERT INTO employs VALUES
@@ -99,6 +102,7 @@ CREATE TABLE constructs (
 	CONSTRAINT constructs_fk_team
 		FOREIGN KEY (team_id)
 		REFERENCES team (team_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 INSERT INTO constructs VALUES
@@ -140,10 +144,12 @@ CREATE TABLE sponsors (
 		PRIMARY KEY (company_id, team_id, season),
 	CONSTRAINT sponsors_fk_company
 		FOREIGN KEY (company_id)
-		REFERENCES company (company_id),
+		REFERENCES company (company_id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT sponsors_fk_team
 		FOREIGN KEY (team_id)
 		REFERENCES team (team_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 INSERT INTO sponsors VALUES
@@ -177,10 +183,12 @@ CREATE TABLE manages (
 		PRIMARY KEY (principal_id, team_id, season),
 	CONSTRAINT manages_fk_principal
 		FOREIGN KEY (principal_id)
-		REFERENCES principal (principal_id),
+		REFERENCES principal (principal_id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT manages_fk_team
 		FOREIGN KEY (team_id)
 		REFERENCES team (team_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 INSERT INTO manages VALUES
@@ -198,6 +206,7 @@ CREATE TABLE circuit (
     CONSTRAINT circuit_fk_nation
 		FOREIGN KEY (nation_id)
 		REFERENCES nation (nation_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 INSERT INTO circuit (circuit_name, distance, laps, city, nation_id) VALUES
@@ -236,6 +245,7 @@ CREATE TABLE grand_prix (
     CONSTRAINT grand_prix_fk_circuit
 		FOREIGN KEY (circuit_id)
 		REFERENCES circuit (circuit_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 INSERT INTO grand_prix (grand_prix_name, race_date, circuit_id) VALUES
@@ -272,10 +282,12 @@ CREATE TABLE drives (
 		PRIMARY KEY (driver_id, grand_prix_id),
 	CONSTRAINT drives_fk_driver
 		FOREIGN KEY (driver_id)
-		REFERENCES driver (driver_id),
+		REFERENCES driver (driver_id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT drives_fk_grand_prix
 		FOREIGN KEY (grand_prix_id)
 		REFERENCES grand_prix (grand_prix_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 INSERT INTO drives VALUES
@@ -325,7 +337,7 @@ INSERT INTO drives VALUES
 (11, 9, 8, 4), (12, 9, 5, 10), (13, 9, 9, 2), (14, 9, 12, 0), (15, 9, 15, 0),
 (16, 9, 14, 0), (17, 9, NULL, 0), (18, 9, NULL, 0), (19, 9, 16, 0), (20, 9, 11, 0),
 -- Race 10
-(1, 10, 1, 27), (2, 10, 3, 16), (3, 10, 16, 0), (4, 10, NULL, 0), (5, 10, 5, 10),
+(1, 10, 1, 27), (2, 10, 3, 16), (3, 10, 16, 0), (4, 10, NULL, 3), (5, 10, 5, 10),
 (6, 10, 4, 12), (7, 10, NULL, 0), (8, 10, 8, 4), (9, 10, 7, 6), (10, 10, 9, 2),
 (11, 10, 2, 18), (12, 10, 6, 8), (13, 10, 11, 0), (14, 10, 10, 1), (15, 10, 15, 0),
 (16, 10, 13, 0), (17, 10, 17, 0), (18, 10, 18, 0), (19, 10, 14, 0), (20, 10, 12, 0),
@@ -390,3 +402,23 @@ INSERT INTO drives VALUES
 (6, 22, 7, 6), (7, 22, 11, 0), (8, 22, 13, 0), (9, 22, 8, 4), (10, 22, 9, 2),
 (11, 22, 10, 1), (12, 22, 3, 15), (13, 22, 5, 10), (14, 22, 4, 12), (15, 22, NULL, 0),
 (16, 22, NULL, 0), (18, 22, 14, 0), (19, 22, NULL, 0), (20, 22, NULL, 0);
+
+DROP PROCEDURE IF EXISTS driver_standings;
+DELIMITER $$
+CREATE PROCEDURE driver_standings(season YEAR)
+BEGIN
+	SELECT ROW_NUMBER() OVER(ORDER BY points DESC) AS position, driver_name, team_name, points 
+		FROM (SELECT driver_id, SUM(points) AS points FROM drives JOIN grand_prix USING (grand_prix_id) WHERE YEAR(race_date) = season GROUP BY driver_id ORDER BY points DESC) AS total_points
+        JOIN (SELECT * FROM employs JOIN driver USING (driver_id) JOIN team USING (team_id)) AS driver_team USING (driver_id);
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS team_standings;
+DELIMITER $$
+CREATE PROCEDURE team_standings(season YEAR)
+BEGIN
+	SELECT ROW_NUMBER() OVER(ORDER BY SUM(points) DESC) AS position, team_name, SUM(points) AS points
+		FROM (SELECT * FROM employs JOIN driver USING (driver_id) JOIN team USING (team_id)) AS driver_team
+        JOIN (SELECT * FROM drives JOIN grand_prix USING (grand_prix_id) WHERE YEAR(race_date) = season) AS races USING (driver_id) GROUP BY team_id ORDER BY SUM(points) DESC;
+END $$
+DELIMITER ;
