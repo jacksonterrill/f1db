@@ -253,19 +253,17 @@ if __name__ == "__main__":
             supported_operations = ["DRIVER_STANDINGS", "TEAM_STANDINGS", "DRIVER_PROFILES"]
             print("\n" + format_list(supported_operations))
             operation_chosen = input("\nOut of the operations above, which would you like calculate? ").upper().strip()
-            # check if operation name is in the operation list
-            if operation_chosen in supported_operations:
-                # if driver standings is chosen
-                if operation_chosen == "DRIVER_STANDINGS":
-                    season_chosen = input("\nWhich season would you like to calculate standings for? (Enter year) ").upper().strip()
-                    driver_standings(season_chosen, cnx)
-                # if team standings is chosen
-                elif operation_chosen == "TEAM_STANDINGS":
-                    season_chosen = input("\nWhich season would you like to calculate standings for? (Enter year) ").upper().strip()
-                    team_standings(season_chosen, cnx)
-                # if driver profile is chosen
-                elif operation_chosen == "DRIVER_PROFILES":
-                    driver_profiles(cnx)
+            # if driver standings is chosen
+            if operation_chosen == "DRIVER_STANDINGS" or operation_chosen == "DRIVER STANDINGS":
+                season_chosen = input("\nWhich season would you like to calculate standings for? (Enter year) ").upper().strip()
+                driver_standings(season_chosen, cnx)
+            # if team standings is chosen
+            elif operation_chosen == "TEAM_STANDINGS" or operation_chosen == "TEAM STANDINGS":
+                season_chosen = input("\nWhich season would you like to calculate standings for? (Enter year) ").upper().strip()
+                team_standings(season_chosen, cnx)
+            # if driver profile is chosen
+            elif operation_chosen == "DRIVER_PROFILES" or operation_chosen == "DRIVER PROFILES":
+                driver_profiles(cnx)
             # give error message if operation name is invalid 
             else:
                 print('Operation not supported')
