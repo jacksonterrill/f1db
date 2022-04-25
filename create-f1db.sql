@@ -422,3 +422,39 @@ BEGIN
         JOIN (SELECT * FROM drives JOIN grand_prix USING (grand_prix_id) WHERE YEAR(race_date) = season) AS races USING (driver_id) GROUP BY team_id ORDER BY SUM(points) DESC;
 END $$
 DELIMITER ;
+
+DROP FUNCTION IF EXISTS count_wins;
+DELIMITER $$
+CREATE FUNCTION count_wins(chosen_driver_id INT)
+RETURNS INT
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+	DECLARE count INT;
+	SELECT COUNT(*) INTO count FROM drives WHERE position = 1 AND driver_id = chosen_driver_id;
+    RETURN count;
+END $$
+DELIMITER ;
+
+DROP FUNCTION IF EXISTS count_podiums;
+DELIMITER $$
+CREATE FUNCTION count_podiums(chosen_driver_id INT)
+RETURNS INT
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+	DECLARE count INT;
+	SELECT COUNT(*) INTO count FROM drives WHERE position <= 3 AND driver_id = chosen_driver_id;
+    RETURN count;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS driver_profiles;
+DELIMITER $$
+CREATE PROCEDURE driver_profiles()
+BEGIN
+	SELECT racing_number, driver_name, YEAR(NOW()) - YEAR(birthday) AS age, nation_name AS nationality, points, count_wins(driver_id) AS wins, count_podiums(driver_id) AS podiums
+    FROM (SELECT driver_id, SUM(points) AS points FROM drives JOIN grand_prix USING (grand_prix_id) GROUP BY driver_id) AS total_points
+    JOIN driver USING (driver_id) JOIN nation ON nationality = nation_id ORDER BY racing_number;
+END $$
+DELIMITER ;

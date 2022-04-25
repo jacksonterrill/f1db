@@ -205,6 +205,21 @@ def team_standings(season, cnx):
     except pymysql.Error as e:
         print('SELECT failed, ERROR %d: %s' % (e.args[0], e.args[1]))
 
+# if driver profiles is chosen
+def driver_profiles(cnx):
+    # create call statement for driver_profiles procedure
+    stmt_call = "CALL driver_profiles()"
+    # execute call statement
+    try:
+        cur = cnx.cursor()
+        cur.execute(stmt_call)
+        # print table
+        print("\n" + tabulate(cur.fetchall(), headers="keys", tablefmt="pretty"))
+               
+    # give error message if goes wrong
+    except pymysql.Error as e:
+        print('SELECT failed, ERROR %d: %s' % (e.args[0], e.args[1]))
+
 # create list of tables
 def generate_table_list(cnx):
     table_list = []
@@ -235,22 +250,22 @@ if __name__ == "__main__":
     while option != "EXIT":
         # if calculate is chosen
         if option == "CALCULATE":
-            supported_operations = ["DRIVER STANDINGS", "TEAM STANDINGS", "DRIVER PROFILE"]
+            supported_operations = ["DRIVER_STANDINGS", "TEAM_STANDINGS", "DRIVER_PROFILES"]
             print("\n" + format_list(supported_operations))
             operation_chosen = input("\nOut of the operations above, which would you like calculate? ").upper().strip()
             # check if operation name is in the operation list
             if operation_chosen in supported_operations:
                 # if driver standings is chosen
-                if operation_chosen == "DRIVER STANDINGS":
+                if operation_chosen == "DRIVER_STANDINGS":
                     season_chosen = input("\nWhich season would you like to calculate standings for? (Enter year) ").upper().strip()
                     driver_standings(season_chosen, cnx)
                 # if team standings is chosen
-                elif operation_chosen == "TEAM STANDINGS":
+                elif operation_chosen == "TEAM_STANDINGS":
                     season_chosen = input("\nWhich season would you like to calculate standings for? (Enter year) ").upper().strip()
                     team_standings(season_chosen, cnx)
                 # if driver profile is chosen
-                elif operation_chosen == "DRIVER PROFILE":
-                    driver_profile(cnx)
+                elif operation_chosen == "DRIVER_PROFILES":
+                    driver_profiles(cnx)
             # give error message if operation name is invalid 
             else:
                 print('Operation not supported')
