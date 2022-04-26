@@ -54,6 +54,7 @@ def create(table_chosen, cnx):
     try:
         cur = cnx.cursor()
         cur.execute(insert_stmt)
+        cnx.commit() # commit changes to the database
         print("Tuple successfully created!")
     # if insert command doesnt work then display error
     except pymysql.Error as e:
@@ -121,6 +122,7 @@ def update(table_chosen, cnx):
         try:
             cur = cnx.cursor()
             cur.execute(update_stmt)
+            cnx.commit() # commit changes to the database
             print("Tuple successfully updated!")
         # if update command doesnt work then display error
         except pymysql.Error as e:
@@ -168,6 +170,7 @@ def delete(table_chosen, cnx):
         try:
             cur = cnx.cursor()
             cur.execute(delete_stmt)
+            cnx.commit() # commit changes to the database
             print("Tuple successfully deleted!")
         # if update command doesnt work then display error
         except pymysql.Error as e:
@@ -328,6 +331,5 @@ if __name__ == "__main__":
         # reask default question
         option = input(default_question).upper().strip()
 
-    cnx.commit() # commit changes to the database
     cnx.close() # close the program
     exit()
