@@ -251,16 +251,23 @@ if __name__ == "__main__":
         # if calculate is chosen
         if option == "CALCULATE":
             supported_operations = ["DRIVER_STANDINGS", "TEAM_STANDINGS", "DRIVER_PROFILES"]
+            supported_seasons = ["2021"]
             print("\n" + format_list(supported_operations))
             operation_chosen = input("\nOut of the operations above, which would you like calculate? ").upper().strip()
             # if driver standings is chosen
             if operation_chosen == "DRIVER_STANDINGS" or operation_chosen == "DRIVER STANDINGS":
                 season_chosen = input("\nWhich season would you like to calculate standings for? (Enter year) ").upper().strip()
-                driver_standings(season_chosen, cnx)
+                if season_chosen in supported_seasons:
+                    driver_standings(season_chosen, cnx)
+                else:
+                    print('Season not supported')
             # if team standings is chosen
             elif operation_chosen == "TEAM_STANDINGS" or operation_chosen == "TEAM STANDINGS":
                 season_chosen = input("\nWhich season would you like to calculate standings for? (Enter year) ").upper().strip()
-                team_standings(season_chosen, cnx)
+                if season_chosen in supported_seasons:
+                    team_standings(season_chosen, cnx)
+                else:
+                    print('Season not supported')
             # if driver profile is chosen
             elif operation_chosen == "DRIVER_PROFILES" or operation_chosen == "DRIVER PROFILES":
                 driver_profiles(cnx)
